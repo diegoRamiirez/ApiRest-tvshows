@@ -1,12 +1,12 @@
-require('dotenv').config();
-
-var express = require("express");
-    app = express();
-    bodyParser  = require("body-parser"),
-    methodOverride = require("method-override");
+var express  = require("express"),
+    app      = express(),
+    http     = require("http");
+    bodyParser = require('body-parser');
+    methodOverride = require('method-override');
+    server   = http.createServer(app);
     mongoose = require('mongoose');
 
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json());
 app.use(methodOverride());
 
@@ -18,6 +18,11 @@ router.get('/', function(req, res) {
 
 app.use(router);
 
-app.listen(3000, function() {
-  console.log("Node server running on http://localhost:3000");
+mongoose.connect('mongodb://localhost/tvshows', function(err, res) {
+  if(err) {
+    console.log('ERROR: connecting to Database. ' + err);
+  }
+  app.listen(3000, function() {
+    console.log("Node server running on http://localhost:3000");
+  });
 });
